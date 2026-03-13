@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palacín Pro Dashboard - Registro Diario</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: rgba(30, 41, 59, 0.7);
+            --gold: #ffd700;
+            --accent: #38bdf8;
+            --coffee: #78350f;
+            --smoke: #64748b;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+            color: white;
+        }
+
+        .tabs { display: flex; gap: 8px; margin: 20px 0; z-index: 20; flex-wrap: wrap; justify-content: center; }
+        .tab-btn {
+            padding: 8px 16px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255,255,255,0.1);
+            color: #94a3b8; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 0.75rem;
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .tab-btn.active { background: var(--gold); color: #0f172a; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--gold); }
+
+        .container {
+            text-align: center; background: var(--card); backdrop-filter: blur(20px);
+            padding: 1.5rem; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1); max-width: 500px; width: 90%; margin-bottom: 20px;
+        }
+
+        .content-section { display: none; animation: fadeIn 0.4s ease; }
+        .content-section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        #fecha-actual { font-size: 0.8rem; color: var(--gold); margin-bottom: 10px; text-transform: uppercase; }
+        .emoji-box { font-size: 60px; margin: 10px 0; }
+        .counter-display { font-size: 3.5rem; font-weight: 900; margin: 0; }
+
+        .button-group { display: flex; gap: 10px; margin-top: 20px; }
+        .action-btn { flex: 3; padding: 15px; border: none; border-radius: 16px; font-weight: bold; cursor: pointer; }
+        .undo-btn { flex: 1; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; border-radius: 16px; cursor: pointer; }
+
+        .history-item {
+            background: rgba(255,255,255,0.05); margin: 8px 0; padding: 12px; border-radius: 12px;
+            display: grid; grid-template-columns: 1fr auto; align-items: center; text-align: left;
+        }
+        .history-date { font-size: 0.75rem; color: #94a3b8; text-transform: capitalize; }
+        .history-vals { display: flex; gap: 10px; font-size: 0.9rem; font-weight: bold; }
+        .history-week-header { 
+            margin-top: 20px; padding: 5px 10px; background: rgba(255, 215, 0, 0.1); 
+            border-left: 3px solid var(--gold); text-align: left; font-size: 0.8rem; font-weight: bold;
+        }
+
+        .chart-container { margin-bottom: 25px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 20px; }
+
+        .dino-theme { background: linear-gradient(135deg, #fbbf24, #d97706); color: #451a03; }
+        .coffee-theme { background: linear-gradient(135deg, #78350f, #451a03); color: white; }
+        .smoke-theme { background: linear-gradient(135deg, #64748b, #334155); color: white; }
+    </style>
+</head>
+<body>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('dino-sec', this)">Dino</button>
+        <button class="tab-btn" onclick="switchTab('coffee-sec', this)">Coffee</button>
+        <button class="tab-btn" onclick="switchTab('smoke-sec', this)">Gascón</button>
+        <button class="tab-btn" onclick="switchTab('stats-sec', this)" style="border-color: var(--gold)">📅 Registro</button>
+    </div>
+
+    <div class="container">
+        <div id="fecha-actual"></div>
+
+        <div id="dino-sec" class="content-section active">
+            <div class="emoji-box">🦖</div>
+            <div class="counter-display" id="countDino">0</div>
+            <div class="button-group">
+                <button class="action-btn dino-theme" onclick="incrementar('dino')">¡PISOTÓN!</button>
+                <button class="undo-btn" onclick="decrementar('dino')">➖</button>
+            </div>
+        </div>
+
+        <div id="coffee-sec" class="content-section">
+            <div class="emoji-box">☕</div>
+            <div class="counter-display" id="countCoffee">0</div>
+            <div class="button-group">
+                <button class="action-btn coffee-theme" onclick="incrementar('coffee')">¡CAFÉ!</button>
+                <button class="undo-btn" onclick="decrementar('coffee')">➖</button>
+            </div>
+        </div>
+
+        <div id="smoke-sec" class="content-section">
+            <div class="emoji-box">🚬</div>
+            <div class="counter-display" id="countSmoke">0</div>
+            <div class="button-group">
+                <button class="action-btn smoke-theme" onclick="incrementar('smoke')">¡PITI!</button>
+                <button class="undo-btn" onclick="decrementar('smoke')">➖</button>
+            </div>
+        </div>
+
+        <div id="stats-sec" class="content-section">
+            <h3 style="margin:0 0 15px 0; font-size: 1rem;">EVOLUCIÓN DIARIA</h3>
+            <div class="chart-container">
+                <canvas id="dailyChart"></canvas>
+            </div>
+            
+            <h3 style="margin:20px 0 10px 0; font-size: 1rem;">HISTORIAL DETALLADO</h3>
+            <div id="history-container" style="max-height: 250px; overflow-y: auto; padding-right: 5px;"></div>
+        </div>
+    </div>
+
+    <script>
+        let db = JSON.parse(localStorage.getItem('palacinDB')) || {};
+        const hoy = new Date().toISOString().split('T')[0];
+        let myChart = null; // Variable para la instancia de la gráfica
+
+        function init() {
+            const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
+            document.getElementById('fecha-actual').innerText = new Date().toLocaleDateString('es-ES', opciones);
+            
+            if (!db[hoy]) {
+                db[hoy] = { dino: 0, coffee: 0, smoke: 0 };
+                save();
+            }
+            refreshUI();
+        }
+
+        function incrementar(tipo) {
+            db[hoy][tipo]++;
+            if (tipo === 'dino' && db[hoy][tipo] === 31) {
+                confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            }
+            save();
+            refreshUI();
+        }
+
+        function decrementar(tipo) {
+            if (db[hoy][tipo] > 0) db[hoy][tipo]--;
+            save();
+            refreshUI();
+        }
+
+        function save() {
+            localStorage.setItem('palacinDB', JSON.stringify(db));
+        }
+
+        function refreshUI() {
+            document.getElementById('countDino').innerText = db[hoy].dino;
+            document.getElementById('countCoffee').innerText = db[hoy].coffee;
+            document.getElementById('countSmoke').innerText = db[hoy].smoke;
+            renderHistory();
+            renderChart(); // Actualizar gráfica
+        }
+
+        function getWeekNumber(d) {
+            d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+            d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
+            var yearStart = new Date(Date.UTC(d.getUTCFullYear(), 0, 1));
+            return Math.ceil((((d - yearStart) / 86400000) + 1) / 7);
+        }
+
+        function renderChart() {
+            const ctx = document.getElementById('dailyChart').getContext('2d');
+            
+            // Obtener últimas 7 fechas registradas y ordenarlas cronológicamente
+            const sortedDates = Object.keys(db).sort().slice(-7); 
+            
+            const labels = sortedDates.map(d => {
+                const date = new Date(d);
+                return date.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+            });
+
+            const dataDino = sortedDates.map(d => db[d].dino || 0);
+            const dataCoffee = sortedDates.map(d => db[d].coffee || 0);
+            const dataSmoke = sortedDates.map(d => db[d].smoke || 0);
+
+            if (myChart) {
+                myChart.destroy(); // Destruir la anterior para evitar solapamientos
+            }
+
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: '🦖', data: dataDino, backgroundColor: '#ffd700', borderRadius: 5 },
+                        { label: '☕', data: dataCoffee, backgroundColor: '#78350f', borderRadius: 5 },
+                        { label: '🚬', data: dataSmoke, backgroundColor: '#64748b', borderRadius: 5 }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
+                        x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
+                    },
+                    plugins: {
+                        legend: { labels: { color: 'white', font: { size: 14 } } }
+                    }
+                }
+            });
+        }
+
+        function renderHistory() {
+            const container = document.getElementById('history-container');
+            const sortedDates = Object.keys(db).sort((a, b) => b.localeCompare(a));
+            
+            let html = '';
+            let currentWeek = -1;
+            let weekTotals = { dino: 0, coffee: 0, smoke: 0 };
+
+            sortedDates.forEach((dateStr, index) => {
+                const dateObj = new Date(dateStr);
+                const weekNum = getWeekNumber(dateObj);
+                const dayData = db[dateStr];
+
+                if (currentWeek !== -1 && currentWeek !== weekNum) {
+                    html += `
+                        <div class="history-week-header" style="background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);">
+                            TOTAL SEMANA: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}
+                        </div>`;
+                    weekTotals = { dino: 0, coffee: 0, smoke: 0 };
+                }
+
+                if (currentWeek !== weekNum) {
+                    html += `<div class="history-week-header">SEMANA ${weekNum} - ${dateObj.getFullYear()}</div>`;
+                    currentWeek = weekNum;
+                }
+
+                weekTotals.dino += dayData.dino || 0;
+                weekTotals.coffee += dayData.coffee || 0;
+                weekTotals.smoke += dayData.smoke || 0;
+
+                const dateFmt = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: 'short' });
+                
+                html += `
+                    <div class="history-item">
+                        <div class="history-date">${dateFmt} ${dateStr === hoy ? '<b>(Hoy)</b>' : ''}</div>
+                        <div class="history-vals">
+                            <span>🦖 ${dayData.dino}</span>
+                            <span>☕ ${dayData.coffee}</span>
+                            <span>🚬 ${dayData.smoke}</span>
+                        </div>
+                    </div>
+                `;
+
+                if (index === sortedDates.length - 1) {
+                    html += `
+                        <div class="history-week-header" style="background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);">
+                            TOTAL SEMANA: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}
+                        </div>`;
+                }
+            });
+
+            container.innerHTML = html || '<p style="color:#64748b">No hay registros aún</p>';
+        }
+
+        function switchTab(sectionId, btn) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            btn.classList.add('active');
+            
+            // Si entramos en la sección de estadísticas, forzamos el redibujado de la gráfica
+            if(sectionId === 'stats-sec') {
+                setTimeout(renderChart, 100);
+            }
+        }
+
+        init();
+    </script>
+</body>
+</html>
