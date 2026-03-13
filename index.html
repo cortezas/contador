@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
   <head>
     <meta charset="UTF-8" />
@@ -26,236 +26,82 @@
         color: white;
       }
 
-      .tabs {
-        display: flex;
-        gap: 8px;
-        margin: 20px 0;
-        z-index: 20;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
+      .tabs { display: flex; gap: 8px; margin: 20px 0; z-index: 20; flex-wrap: wrap; justify-content: center; }
       .tab-btn {
-        padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #94a3b8;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
+        padding: 8px 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+        color: #94a3b8; border-radius: 12px; cursor: pointer; transition: 0.3s; font-size: 0.7rem;
+        text-transform: uppercase; letter-spacing: 1px;
       }
-      .tab-btn.active {
-        background: var(--gold);
-        color: #0f172a;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        border-color: var(--gold);
-      }
+      .tab-btn.active { background: var(--gold); color: #0f172a; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3); border-color: var(--gold); }
 
       .container {
-        text-align: center;
-        background: var(--card);
-        backdrop-filter: blur(20px);
-        padding: 1.5rem;
-        border-radius: 32px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        max-width: 550px;
-        width: 95%;
-        margin-bottom: 20px;
+        text-align: center; background: var(--card); backdrop-filter: blur(20px);
+        padding: 1.5rem; border-radius: 32px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.1); max-width: 550px; width: 95%; margin-bottom: 20px;
       }
 
-      .content-section {
-        display: none;
-        animation: fadeIn 0.4s ease;
-      }
-      .content-section.active {
-        display: block;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+      .content-section { display: none; animation: fadeIn 0.4s ease; }
+      .content-section.active { display: block; }
+      @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
-      #fecha-actual {
-        font-size: 0.8rem;
-        color: var(--gold);
-        margin-bottom: 5px;
-        text-transform: uppercase;
-      }
+      #fecha-actual { font-size: 0.8rem; color: var(--gold); margin-bottom: 5px; text-transform: uppercase; }
 
       .records-bar {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 15px;
-        padding: 8px;
-        margin-bottom: 15px;
-        font-size: 0.75rem;
-        border: 1px dashed rgba(255, 215, 0, 0.3);
+        background: rgba(0, 0, 0, 0.3); border-radius: 15px; padding: 8px; margin-bottom: 15px;
+        font-size: 0.75rem; border: 1px dashed rgba(255, 215, 0, 0.3);
       }
 
-      .emoji-box {
-        font-size: 60px;
-        margin: 10px 0;
-      }
-      .counter-display {
-        font-size: 3.5rem;
-        font-weight: 900;
-        margin: 0;
-      }
+      .emoji-box { font-size: 60px; margin: 10px 0; }
+      .counter-display { font-size: 3.5rem; font-weight: 900; margin: 0; }
 
-      .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .action-btn {
-        flex: 3;
-        padding: 15px;
-        border: none;
-        border-radius: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-      .undo-btn {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        border-radius: 16px;
-        cursor: pointer;
-      }
+      .button-group { display: flex; gap: 10px; margin-top: 20px; }
+      .action-btn { flex: 3; padding: 15px; border: none; border-radius: 16px; font-weight: bold; cursor: pointer; transition: 0.2s; }
+      .undo-btn { flex: 1; background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; border-radius: 16px; cursor: pointer; }
 
-      /* Sub-tabs para stats */
-      .sub-tabs {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-bottom: 15px;
-      }
-      .sub-tab-btn {
-        font-size: 0.65rem;
-        padding: 5px 10px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: white;
-        cursor: pointer;
-      }
-      .sub-tab-btn.active {
-        background: var(--accent);
-      }
+      .sub-tabs { display: flex; justify-content: center; gap: 5px; margin-bottom: 15px; }
+      .sub-tab-btn { font-size: 0.65rem; padding: 5px 10px; border-radius: 8px; background: rgba(255, 255, 255, 0.1); border: none; color: white; cursor: pointer; }
+      .sub-tab-btn.active { background: var(--accent); }
 
-      .chart-container {
-        background: rgba(0, 0, 0, 0.2);
-        padding: 10px;
-        border-radius: 20px;
-        margin-bottom: 20px;
-        min-height: 250px;
-      }
-      .chart-view {
-        display: none;
-      }
-      .chart-view.active {
-        display: block;
-      }
+      .chart-container { background: rgba(0, 0, 0, 0.2); padding: 10px; border-radius: 20px; margin-bottom: 20px; min-height: 250px; }
+      .chart-view { display: none; }
+      .chart-view.active { display: block; }
 
       .history-item {
-        background: rgba(255, 255, 255, 0.05);
-        margin: 8px 0;
-        padding: 12px;
-        border-radius: 12px;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        text-align: left;
+        background: rgba(255, 255, 255, 0.05); margin: 8px 0; padding: 12px; border-radius: 12px;
+        display: grid; grid-template-columns: 1fr auto; align-items: center; text-align: left;
       }
-      .history-date {
-        font-size: 0.75rem;
-        color: #94a3b8;
-      }
-      .history-vals {
-        display: flex;
-        gap: 10px;
-        font-size: 0.9rem;
-        font-weight: bold;
-      }
-      .history-week-header {
-        margin-top: 20px;
-        padding: 5px 10px;
-        background: rgba(255, 215, 0, 0.1);
-        border-left: 3px solid var(--gold);
-        text-align: left;
-        font-size: 0.8rem;
-        font-weight: bold;
-      }
+      .history-date { font-size: 0.75rem; color: #94a3b8; }
+      .history-vals { display: flex; gap: 10px; font-size: 0.9rem; font-weight: bold; }
+      .history-week-header { margin-top: 20px; padding: 5px 10px; background: rgba(255, 215, 0, 0.1); border-left: 3px solid var(--gold); text-align: left; font-size: 0.8rem; font-weight: bold; }
 
-      .log-item {
-        padding: 8px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        font-size: 0.8rem;
-        text-align: left;
-      }
+      .log-item { padding: 8px; border-bottom: 1px solid rgba(255, 255, 255, 0.05); font-size: 0.8rem; text-align: left; }
 
-      .dino-theme {
-        background: linear-gradient(135deg, #fbbf24, #d97706);
-        color: #451a03;
-      }
-      .coffee-theme {
-        background: linear-gradient(135deg, #78350f, #451a03);
-        color: white;
-      }
-      .smoke-theme {
-        background: linear-gradient(135deg, #64748b, #334155);
-        color: white;
-      }
+      .dino-theme { background: linear-gradient(135deg, #fbbf24, #d97706); color: #451a03; }
+      .coffee-theme { background: linear-gradient(135deg, #78350f, #451a03); color: white; }
+      .smoke-theme { background: linear-gradient(135deg, #64748b, #334155); color: white; }
     </style>
   </head>
   <body>
     <div class="tabs">
-      <button class="tab-btn active" onclick="switchTab('dino-sec', this)">
-        Dino
-      </button>
-      <button class="tab-btn" onclick="switchTab('coffee-sec', this)">
-        Coffee
-      </button>
-      <button class="tab-btn" onclick="switchTab('smoke-sec', this)">
-        Gascón
-      </button>
-      <button class="tab-btn" onclick="switchTab('stats-sec', this)">
-        📊 Stats
-      </button>
-      <button
-        class="tab-btn"
-        onclick="switchTab('logs-sec', this)"
-        style="border-color: var(--accent)"
-      >
-        🕒 Logs
-      </button>
+      <button class="tab-btn active" onclick="switchTab('dino-sec', this)">Dino</button>
+      <button class="tab-btn" onclick="switchTab('coffee-sec', this)">Coffee</button>
+      <button class="tab-btn" onclick="switchTab('smoke-sec', this)">Gascón</button>
+      <button class="tab-btn" onclick="switchTab('stats-sec', this)">📊 Stats</button>
+      <button class="tab-btn" onclick="switchTab('logs-sec', this)" style="border-color: var(--accent)">🕒 Logs</button>
     </div>
 
     <div class="container">
       <div id="fecha-actual"></div>
 
       <div class="records-bar">
-        🏆 MÁXIMOS: 🦖 <span id="rec-dino">0</span> | ☕
-        <span id="rec-coffee">0</span> | 🚬 <span id="rec-smoke">0</span>
+        🏆 MÁXIMOS DIARIOS: 🦖 <span id="rec-dino">0</span> | ☕ <span id="rec-coffee">0</span> | 🚬 <span id="rec-smoke">0</span>
       </div>
 
       <div id="dino-sec" class="content-section active">
         <div class="emoji-box">🦖</div>
         <div class="counter-display" id="countDino">0</div>
         <div class="button-group">
-          <button class="action-btn dino-theme" onclick="incrementar('dino')">
-            ¡PISOTÓN!
-          </button>
+          <button class="action-btn dino-theme" onclick="incrementar('dino')">¡PISOTÓN!</button>
           <button class="undo-btn" onclick="decrementar('dino')">➖</button>
         </div>
       </div>
@@ -264,12 +110,7 @@
         <div class="emoji-box">☕</div>
         <div class="counter-display" id="countCoffee">0</div>
         <div class="button-group">
-          <button
-            class="action-btn coffee-theme"
-            onclick="incrementar('coffee')"
-          >
-            ¡CAFÉ!
-          </button>
+          <button class="action-btn coffee-theme" onclick="incrementar('coffee')">¡CAFÉ!</button>
           <button class="undo-btn" onclick="decrementar('coffee')">➖</button>
         </div>
       </div>
@@ -278,91 +119,35 @@
         <div class="emoji-box">🚬</div>
         <div class="counter-display" id="countSmoke">0</div>
         <div class="button-group">
-          <button class="action-btn smoke-theme" onclick="incrementar('smoke')">
-            ¡PITI!
-          </button>
+          <button class="action-btn smoke-theme" onclick="incrementar('smoke')">¡PITI!</button>
           <button class="undo-btn" onclick="decrementar('smoke')">➖</button>
         </div>
       </div>
 
       <div id="stats-sec" class="content-section">
         <div class="sub-tabs">
-          <button
-            class="sub-tab-btn active"
-            onclick="switchChartView('daily', this)"
-          >
-            Diario
-          </button>
-          <button class="sub-tab-btn" onclick="switchChartView('weekly', this)">
-            Semanal
-          </button>
-          <button
-            class="sub-tab-btn"
-            onclick="switchChartView('monthly', this)"
-          >
-            Mensual
-          </button>
+          <button class="sub-tab-btn active" onclick="switchChartView('daily', this)">Diario</button>
+          <button class="sub-tab-btn" onclick="switchChartView('weekly', this)">Semanal</button>
+          <button class="sub-tab-btn" onclick="switchChartView('monthly', this)">Mensual</button>
         </div>
-
-        <div
-          class="sub-tabs"
-          style="
-            border-top: 1px solid rgba(255, 255, 255, 0.05);
-            padding-top: 10px;
-            margin-top: -10px;
-          "
-        >
-          <button
-            class="sub-tab-btn"
-            id="btn-bar"
-            onclick="setChartType('bar')"
-          >
-            📊 Barras
-          </button>
-          <button
-            class="sub-tab-btn active"
-            id="btn-line"
-            onclick="setChartType('line')"
-          >
-            📈 Líneas
-          </button>
+        <div class="sub-tabs" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px; margin-top: -10px;">
+          <button class="sub-tab-btn" id="btn-bar" onclick="setChartType('bar')">📊 Barras</button>
+          <button class="sub-tab-btn active" id="btn-line" onclick="setChartType('line')">📈 Líneas</button>
         </div>
 
         <div class="chart-container">
-          <div id="daily-view" class="chart-view active">
-            <canvas id="dailyChart"></canvas>
-          </div>
-          <div id="weekly-view" class="chart-view">
-            <canvas id="weeklyChart"></canvas>
-          </div>
-          <div id="monthly-view" class="chart-view">
-            <canvas id="monthlyChart"></canvas>
-          </div>
+          <div id="daily-view" class="chart-view active"><canvas id="dailyChart"></canvas></div>
+          <div id="weekly-view" class="chart-view"><canvas id="weeklyChart"></canvas></div>
+          <div id="monthly-view" class="chart-view"><canvas id="monthlyChart"></canvas></div>
         </div>
 
-        <h3
-          style="
-            margin: 20px 0 10px 0;
-            font-size: 0.9rem;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            padding-bottom: 5px;
-          "
-        >
-          HISTORIAL DETALLADO
-        </h3>
-        <div
-          id="history-container"
-          style="max-height: 250px; overflow-y: auto; padding-right: 5px"
-        ></div>
+        <h3 style="margin: 20px 0 10px 0; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 5px;">HISTORIAL DETALLADO</h3>
+        <div id="history-container" style="max-height: 250px; overflow-y: auto; padding-right: 5px"></div>
       </div>
 
       <div id="logs-sec" class="content-section">
-        <h3 style="margin: 0 0 15px 0; font-size: 1rem; color: var(--accent)">
-          ÚLTIMA ACTIVIDAD
-        </h3>
-        <div id="log-lista" style="max-height: 400px; overflow-y: auto">
-          Cargando actividad...
-        </div>
+        <h3 style="margin: 0 0 15px 0; font-size: 1rem; color: var(--accent)">ÚLTIMA ACTIVIDAD</h3>
+        <div id="log-lista" style="max-height: 400px; overflow-y: auto">Cargando actividad...</div>
       </div>
     </div>
 
@@ -373,8 +158,7 @@
       const firebaseConfig = {
         apiKey: "AIzaSyCfEoMAHh3xBClnXNKxQm--9HKE8GebXns",
         authDomain: "palacin-dashboard.firebaseapp.com",
-        databaseURL:
-          "https://palacin-dashboard-default-rtdb.europe-west1.firebasedatabase.app",
+        databaseURL: "https://palacin-dashboard-default-rtdb.europe-west1.firebasedatabase.app",
         projectId: "palacin-dashboard",
         storageBucket: "palacin-dashboard.firebasestorage.app",
         messagingSenderId: "825240958725",
@@ -387,6 +171,7 @@
       const dbRef = database.ref("palacinDB");
       const logsRef = database.ref("logs_clicks");
       const recordsRef = database.ref("records_historicos");
+      const lockRef = database.ref("estado_bloqueo");
 
       let db = {};
       let estaBloqueado = false;
@@ -394,11 +179,11 @@
       const hoy = new Date().toISOString().split("T")[0];
       let charts = { daily: null, weekly: null, monthly: null };
       let currentChartType = "line";
+      let timerInterval = null;
 
       function init() {
         const opciones = { weekday: "long", day: "numeric", month: "long" };
-        document.getElementById("fecha-actual").innerText =
-          new Date().toLocaleDateString("es-ES", opciones);
+        document.getElementById("fecha-actual").innerText = new Date().toLocaleDateString("es-ES", opciones);
 
         dbRef.on("value", (snapshot) => {
           db = snapshot.val() || {};
@@ -407,24 +192,41 @@
           verificarRecords();
         });
 
+        // BLOQUEO GLOBAL SINCRONIZADO
+        lockRef.on("value", (snapshot) => {
+          const data = snapshot.val();
+          if (data && data.bloqueado) {
+            const tiempoPasado = Date.now() - data.timestamp;
+            const tiempoRestante = TIEMPO_BLOQUEO - tiempoPasado;
+            if (tiempoRestante > 0) {
+              activarBloqueoVisual(Math.ceil(tiempoRestante / 1000));
+            } else {
+              liberarBloqueoVisual();
+            }
+          } else {
+            liberarBloqueoVisual();
+          }
+        });
+
         logsRef.limitToLast(20).on("value", (snapshot) => {
           const logs = snapshot.val();
           const lista = document.getElementById("log-lista");
-          if (!logs) {
-            lista.innerHTML = "No hay actividad";
-            return;
-          }
-          lista.innerHTML = Object.values(logs)
-            .reverse()
-            .map((log) => {
+          if (!logs) { lista.innerHTML = "No hay actividad"; return; }
+          lista.innerHTML = Object.values(logs).reverse().map((log) => {
               const iconos = { dino: "🦖", coffee: "☕", smoke: "🚬" };
-              return `<div class="log-item"><span style="color:var(--smoke)">${log.fecha.split(", ")[1]}</span> <span style="margin-left:10px">Se marcó ${iconos[log.tipo]}</span></div>`;
-            })
-            .join("");
+              const color = log.accion === "resta" ? "#ef4444" : "#10b981";
+              const prefijo = log.accion === "resta" ? "-" : "+";
+              const partes = log.fecha.split(", ");
+              return `<div class="log-item">
+                <span style="color:var(--smoke)">${partes[0]} ${partes[1]}</span> 
+                <span style="margin-left:10px; color:${color}; font-weight:bold;">${prefijo}1 ${iconos[log.tipo]}</span>
+                <span style="color:#94a3b8; font-size:0.75rem;"> (Total: ${log.valor_final})</span>
+              </div>`;
+            }).join("");
         });
 
         recordsRef.on("value", (snapshot) => {
-          const recs = snapshot.val() || {};
+          const recs = snapshot.val() || { dino: 0, coffee: 0, smoke: 0 };
           document.getElementById("rec-dino").innerText = recs.dino || 0;
           document.getElementById("rec-coffee").innerText = recs.coffee || 0;
           document.getElementById("rec-smoke").innerText = recs.smoke || 0;
@@ -433,64 +235,85 @@
 
       function incrementar(tipo) {
         if (estaBloqueado) return;
+        lockRef.set({ bloqueado: true, timestamp: firebase.database.ServerValue.TIMESTAMP });
+
         if (!db[hoy]) db[hoy] = { dino: 0, coffee: 0, smoke: 0 };
         db[hoy][tipo]++;
+        const nuevoValor = db[hoy][tipo];
+        
         dbRef.child(hoy).set(db[hoy]);
         logsRef.push({
-          tipo: tipo,
+          tipo: tipo, accion: "suma", valor_final: nuevoValor,
           timestamp: firebase.database.ServerValue.TIMESTAMP,
           fecha: new Date().toLocaleString("es-ES"),
         });
-        if (tipo === "dino" && db[hoy][tipo] === 31)
-          confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-        activarBloqueoTemporal();
+        
+        if (tipo === "dino" && nuevoValor === 31) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
       }
 
       function decrementar(tipo) {
         if (estaBloqueado) return;
         if (db[hoy] && db[hoy][tipo] > 0) {
+          lockRef.set({ bloqueado: true, timestamp: firebase.database.ServerValue.TIMESTAMP });
           db[hoy][tipo]--;
+          const nuevoValor = db[hoy][tipo];
+          
           dbRef.child(hoy).set(db[hoy]);
-          activarBloqueoTemporal();
+          logsRef.push({
+            tipo: tipo, accion: "resta", valor_final: nuevoValor,
+            timestamp: firebase.database.ServerValue.TIMESTAMP,
+            fecha: new Date().toLocaleString("es-ES"),
+          });
         }
       }
 
       function verificarRecords() {
+        let maximos = { dino: 0, coffee: 0, smoke: 0 };
+        Object.keys(db).forEach(fecha => {
+          if (db[fecha].dino > maximos.dino) maximos.dino = db[fecha].dino;
+          if (db[fecha].coffee > maximos.coffee) maximos.coffee = db[fecha].coffee;
+          if (db[fecha].smoke > maximos.smoke) maximos.smoke = db[fecha].smoke;
+        });
         recordsRef.once("value", (snapshot) => {
-          const records = snapshot.val() || { dino: 0, coffee: 0, smoke: 0 };
-          let cambio = false;
-          ["dino", "coffee", "smoke"].forEach((t) => {
-            if ((db[hoy][t] || 0) > (records[t] || 0)) {
-              records[t] = db[hoy][t];
-              cambio = true;
-            }
-          });
-          if (cambio) recordsRef.set(records);
+          const currentRecords = snapshot.val() || { dino: 0, coffee: 0, smoke: 0 };
+          if (maximos.dino !== currentRecords.dino || maximos.coffee !== currentRecords.coffee || maximos.smoke !== currentRecords.smoke) {
+            recordsRef.set(maximos);
+          }
         });
       }
 
-      function activarBloqueoTemporal() {
+      function activarBloqueoVisual(segundos) {
         estaBloqueado = true;
         const botones = document.querySelectorAll(".action-btn");
-        const originales = Array.from(botones).map((b) => b.innerText);
-        botones.forEach((btn) => {
-          btn.style.opacity = "0.6";
-          btn.style.cursor = "not-allowed";
-        });
-        let restantes = TIEMPO_BLOQUEO / 1000;
-        const timer = setInterval(() => {
+        if (!window.textosOriginales) window.textosOriginales = Array.from(botones).map(b => b.innerText);
+        
+        botones.forEach(btn => { btn.style.opacity = "0.6"; btn.style.cursor = "not-allowed"; });
+        if (timerInterval) clearInterval(timerInterval);
+        
+        let restantes = segundos;
+        botones.forEach(b => b.innerText = `ESPERA (${restantes}s)`);
+        timerInterval = setInterval(() => {
           restantes--;
-          botones.forEach((b) => (b.innerText = `ESPERA (${restantes}s)`));
           if (restantes <= 0) {
-            clearInterval(timer);
-            estaBloqueado = false;
-            botones.forEach((b, i) => {
-              b.innerText = originales[i];
-              b.style.opacity = "1";
-              b.style.cursor = "pointer";
-            });
+            clearInterval(timerInterval);
+            lockRef.set({ bloqueado: false, timestamp: 0 });
+          } else {
+            botones.forEach(b => b.innerText = `ESPERA (${restantes}s)`);
           }
         }, 1000);
+      }
+
+      function liberarBloqueoVisual() {
+        estaBloqueado = false;
+        if (timerInterval) clearInterval(timerInterval);
+        const botones = document.querySelectorAll(".action-btn");
+        if (window.textosOriginales) {
+          botones.forEach((b, i) => {
+            b.innerText = window.textosOriginales[i];
+            b.style.opacity = "1";
+            b.style.cursor = "pointer";
+          });
+        }
       }
 
       function refreshUI() {
@@ -503,133 +326,68 @@
       }
 
       function switchChartView(view, btn) {
-        document
-          .querySelectorAll(".chart-view")
-          .forEach((v) => v.classList.remove("active"));
-        const group = btn.parentElement;
-        group
-          .querySelectorAll(".sub-tab-btn")
-          .forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".chart-view").forEach((v) => v.classList.remove("active"));
+        btn.parentElement.querySelectorAll(".sub-tab-btn").forEach((b) => b.classList.remove("active"));
         document.getElementById(view + "-view").classList.add("active");
         btn.classList.add("active");
       }
 
       function setChartType(type) {
         currentChartType = type;
-        document
-          .getElementById("btn-bar")
-          .classList.toggle("active", type === "bar");
-        document
-          .getElementById("btn-line")
-          .classList.toggle("active", type === "line");
+        document.getElementById("btn-bar").classList.toggle("active", type === "bar");
+        document.getElementById("btn-line").classList.toggle("active", type === "line");
         renderAllCharts();
       }
 
       function renderAllCharts() {
         renderChart("daily", Object.keys(db).sort().slice(-7));
-
-        // Agrupación Semanal (Últimas 6 semanas)
         const weeklyData = {};
         Object.keys(db).forEach((date) => {
           const wk = "S" + getWeekNumber(new Date(date));
-          if (!weeklyData[wk])
-            weeklyData[wk] = { dino: 0, coffee: 0, smoke: 0 };
-          weeklyData[wk].dino += db[date].dino;
-          weeklyData[wk].coffee += db[date].coffee;
-          weeklyData[wk].smoke += db[date].smoke;
+          if (!weeklyData[wk]) weeklyData[wk] = { dino: 0, coffee: 0, smoke: 0 };
+          weeklyData[wk].dino += db[date].dino || 0;
+          weeklyData[wk].coffee += db[date].coffee || 0;
+          weeklyData[wk].smoke += db[date].smoke || 0;
         });
         renderChart("weekly", Object.keys(weeklyData).slice(-6), weeklyData);
 
-        // Agrupación Mensual (Últimos 6 meses)
         const monthlyData = {};
         Object.keys(db).forEach((date) => {
-          const mo = new Date(date).toLocaleDateString("es-ES", {
-            month: "short",
-            year: "2-digit",
-          });
-          if (!monthlyData[mo])
-            monthlyData[mo] = { dino: 0, coffee: 0, smoke: 0 };
-          monthlyData[mo].dino += db[date].dino;
-          monthlyData[mo].coffee += db[date].coffee;
-          monthlyData[mo].smoke += db[date].smoke;
+          const mo = new Date(date).toLocaleDateString("es-ES", { month: "short", year: "2-digit" });
+          if (!monthlyData[mo]) monthlyData[mo] = { dino: 0, coffee: 0, smoke: 0 };
+          monthlyData[mo].dino += db[date].dino || 0;
+          monthlyData[mo].coffee += db[date].coffee || 0;
+          monthlyData[mo].smoke += db[date].smoke || 0;
         });
         renderChart("monthly", Object.keys(monthlyData).slice(-6), monthlyData);
       }
 
       function renderChart(type, labels, sourceData = db) {
-        const ctx = document.getElementById(type + "Chart").getContext("2d");
+        const canvas = document.getElementById(type + "Chart");
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
         const dataDino = labels.map((l) => sourceData[l].dino || 0);
         const dataCoffee = labels.map((l) => sourceData[l].coffee || 0);
         const dataSmoke = labels.map((l) => sourceData[l].smoke || 0);
-
         if (charts[type]) charts[type].destroy();
-
         const isBar = currentChartType === "bar";
-
         charts[type] = new Chart(ctx, {
           type: currentChartType,
           data: {
-            labels:
-              type === "daily"
-                ? labels.map((d) =>
-                    new Date(d).toLocaleDateString("es-ES", {
-                      day: "2-digit",
-                      month: "short",
-                    }),
-                  )
-                : labels,
+            labels: type === "daily" ? labels.map((d) => new Date(d).toLocaleDateString("es-ES", { day: "2-digit", month: "short" })) : labels,
             datasets: [
-              {
-                label: "🦖",
-                data: dataDino,
-                borderColor: "#ffd700",
-                backgroundColor: isBar ? "#ffd700" : "rgba(255, 215, 0, 0.1)",
-                borderWidth: 2,
-                borderRadius: isBar ? 5 : 0,
-                tension: 0.4,
-                fill: !isBar,
-              },
-              {
-                label: "☕",
-                data: dataCoffee,
-                borderColor: "#78350f",
-                backgroundColor: isBar ? "#78350f" : "rgba(120, 53, 15, 0.1)",
-                borderWidth: 2,
-                borderRadius: isBar ? 5 : 0,
-                tension: 0.4,
-                fill: !isBar,
-              },
-              {
-                label: "🚬",
-                data: dataSmoke,
-                borderColor: "#64748b",
-                backgroundColor: isBar ? "#64748b" : "rgba(100, 116, 139, 0.1)",
-                borderWidth: 2,
-                borderRadius: isBar ? 5 : 0,
-                tension: 0.4,
-                fill: !isBar,
-              },
+              { label: "🦖", data: dataDino, borderColor: "#ffd700", backgroundColor: isBar ? "#ffd700" : "rgba(255, 215, 0, 0.1)", borderWidth: 2, borderRadius: isBar ? 5 : 0, tension: 0.4, fill: !isBar },
+              { label: "☕", data: dataCoffee, borderColor: "#78350f", backgroundColor: isBar ? "#78350f" : "rgba(120, 53, 15, 0.1)", borderWidth: 2, borderRadius: isBar ? 5 : 0, tension: 0.4, fill: !isBar },
+              { label: "🚬", data: dataSmoke, borderColor: "#64748b", backgroundColor: isBar ? "#64748b" : "rgba(100, 116, 139, 0.1)", borderWidth: 2, borderRadius: isBar ? 5 : 0, tension: 0.4, fill: !isBar },
             ],
           },
           options: {
-            responsive: true,
-            maintainAspectRatio: false,
+            responsive: true, maintainAspectRatio: false,
             scales: {
-              y: {
-                beginAtZero: true,
-                grid: { color: "rgba(255,255,255,0.05)" },
-                ticks: { color: "#94a3b8", font: { size: 10 } },
-              },
-              x: {
-                grid: { display: false },
-                ticks: { color: "#94a3b8", font: { size: 10 } },
-              },
+              y: { beginAtZero: true, grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#94a3b8", font: { size: 10 } } },
+              x: { grid: { display: false }, ticks: { color: "#94a3b8", font: { size: 10 } } },
             },
-            plugins: {
-              legend: {
-                labels: { color: "white", font: { size: 12 }, boxWidth: 12 },
-              },
-            },
+            plugins: { legend: { labels: { color: "white", font: { size: 12 }, boxWidth: 12 } } },
           },
         });
       }
@@ -637,33 +395,19 @@
       function renderHistory() {
         const container = document.getElementById("history-container");
         const sortedDates = Object.keys(db).sort((a, b) => b.localeCompare(a));
-        let html = "",
-          currentWeek = -1,
-          weekTotals = { dino: 0, coffee: 0, smoke: 0 };
-
+        let html = "", currentWeek = -1, weekTotals = { dino: 0, coffee: 0, smoke: 0 };
         sortedDates.forEach((dateStr, index) => {
           const dateObj = new Date(dateStr);
           const weekNum = getWeekNumber(dateObj);
           const dayData = db[dateStr] || { dino: 0, coffee: 0, smoke: 0 };
-          
-          const dinoCount = dayData.dino || 0;
-          const coffeeCount = dayData.coffee || 0;
-          const smokeCount = dayData.smoke || 0;
-
+          const dCount = dayData.dino || 0, cCount = dayData.coffee || 0, sCount = dayData.smoke || 0;
           if (currentWeek !== -1 && currentWeek !== weekNum) {
             html += `<div class="history-week-header" style="color:var(--accent)">TOTAL: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}</div>`;
             weekTotals = { dino: 0, coffee: 0, smoke: 0 };
           }
-          if (currentWeek !== weekNum) {
-            html += `<div class="history-week-header">SEMANA ${weekNum}</div>`;
-            currentWeek = weekNum;
-          }
-          
-          weekTotals.dino += dinoCount;
-          weekTotals.coffee += coffeeCount;
-          weekTotals.smoke += smokeCount;
-          
-          html += `<div class="history-item"><div class="history-date">${dateObj.toLocaleDateString("es-ES", { weekday: "short", day: "2-digit" })} ${dateStr === hoy ? "<b>(Hoy)</b>" : ""}</div><div class="history-vals"><span>🦖${dinoCount}</span><span>☕${coffeeCount}</span><span>🚬${smokeCount}</span></div></div>`;
+          if (currentWeek !== weekNum) { html += `<div class="history-week-header">SEMANA ${weekNum}</div>`; currentWeek = weekNum; }
+          weekTotals.dino += dCount; weekTotals.coffee += cCount; weekTotals.smoke += sCount;
+          html += `<div class="history-item"><div class="history-date">${dateObj.toLocaleDateString("es-ES", { weekday: "short", day: "2-digit" })} ${dateStr === hoy ? "<b>(Hoy)</b>" : ""}</div><div class="history-vals"><span>🦖${dCount}</span><span>☕${cCount}</span><span>🚬${sCount}</span></div></div>`;
         });
         container.innerHTML = html;
       }
@@ -671,19 +415,12 @@
       function getWeekNumber(d) {
         d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
         d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
-        return Math.ceil(
-          ((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000 + 1) /
-            7,
-        );
+        return Math.ceil(((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000 + 1) / 7);
       }
 
       function switchTab(sectionId, btn) {
-        document
-          .querySelectorAll(".content-section")
-          .forEach((s) => s.classList.remove("active"));
-        document
-          .querySelectorAll(".tab-btn")
-          .forEach((b) => b.classList.remove("active"));
+        document.querySelectorAll(".content-section").forEach((s) => s.classList.remove("active"));
+        document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
         document.getElementById(sectionId).classList.add("active");
         btn.classList.add("active");
         if (sectionId === "stats-sec") setTimeout(renderAllCharts, 100);
