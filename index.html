@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Palacín Pro Dashboard - Registro Diario</title>
+    <title>Pro Dashboard - Registro Diario</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -120,49 +120,74 @@
         </div>
     </div>
 
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
+
     <script>
-        let db = JSON.parse(localStorage.getItem('palacinDB')) || {};
+        // Configuración de Firebase
+        const firebaseConfig = {
+            apiKey: "AIzaSyCfEoMAHh3xBClnXNKxQm--9HKE8GebXns",
+            authDomain: "palacin-dashboard.firebaseapp.com",
+            databaseURL: "https://palacin-dashboard-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "palacin-dashboard",
+            storageBucket: "palacin-dashboard.firebasestorage.app",
+            messagingSenderId: "825240958725",
+            appId: "1:825240958725:web:f3d75b8e1d0fbbf011e96c",
+            measurementId: "G-LZM39T7KNY"
+        };
+
+        // Inicializar Firebase
+        firebase.initializeApp(firebaseConfig);
+        const database = firebase.database();
+        const dbRef = database.ref('palacinDB');
+
+        let db = {};
         const hoy = new Date().toISOString().split('T')[0];
-        let myChart = null; // Variable para la instancia de la gráfica
+        let myChart = null;
 
         function init() {
             const opciones = { weekday: 'long', day: 'numeric', month: 'long' };
             document.getElementById('fecha-actual').innerText = new Date().toLocaleDateString('es-ES', opciones);
             
-            if (!db[hoy]) {
-                db[hoy] = { dino: 0, coffee: 0, smoke: 0 };
-                save();
-            }
-            refreshUI();
+            // Escucha en tiempo real (Sincronización dispositivos)
+            dbRef.on('value', (snapshot) => {
+                db = snapshot.val() || {};
+                if (!db[hoy]) {
+                    db[hoy] = { dino: 0, coffee: 0, smoke: 0 };
+                }
+                refreshUI();
+            });
         }
 
         function incrementar(tipo) {
+            if (!db[hoy]) db[hoy] = { dino: 0, coffee: 0, smoke: 0 };
             db[hoy][tipo]++;
+            
             if (tipo === 'dino' && db[hoy][tipo] === 31) {
                 confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
             }
-            save();
-            refreshUI();
+            
+            // Subir a la nube
+            dbRef.child(hoy).set(db[hoy]);
         }
 
         function decrementar(tipo) {
-            if (db[hoy][tipo] > 0) db[hoy][tipo]--;
-            save();
-            refreshUI();
-        }
-
-        function save() {
-            localStorage.setItem('palacinDB', JSON.stringify(db));
+            if (db[hoy] && db[hoy][tipo] > 0) {
+                db[hoy][tipo]--;
+                dbRef.child(hoy).set(db[hoy]);
+            }
         }
 
         function refreshUI() {
-            document.getElementById('countDino').innerText = db[hoy].dino;
-            document.getElementById('countCoffee').innerText = db[hoy].coffee;
-            document.getElementById('countSmoke').innerText = db[hoy].smoke;
+            const datosHoy = db[hoy] || { dino: 0, coffee: 0, smoke: 0 };
+            document.getElementById('countDino').innerText = datosHoy.dino;
+            document.getElementById('countCoffee').innerText = datosHoy.coffee;
+            document.getElementById('countSmoke').innerText = datosHoy.smoke;
             renderHistory();
-            renderChart(); // Actualizar gráfica
+            renderChart();
         }
 
+        // Lógica de semanas y visualización
         function getWeekNumber(d) {
             d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
             d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
@@ -172,8 +197,6 @@
 
         function renderChart() {
             const ctx = document.getElementById('dailyChart').getContext('2d');
-            
-            // Obtener últimas 7 fechas registradas y ordenarlas cronológicamente
             const sortedDates = Object.keys(db).sort().slice(-7); 
             
             const labels = sortedDates.map(d => {
@@ -185,9 +208,7 @@
             const dataCoffee = sortedDates.map(d => db[d].coffee || 0);
             const dataSmoke = sortedDates.map(d => db[d].smoke || 0);
 
-            if (myChart) {
-                myChart.destroy(); // Destruir la anterior para evitar solapamientos
-            }
+            if (myChart) { myChart.destroy(); }
 
             myChart = new Chart(ctx, {
                 type: 'bar',
@@ -205,9 +226,7 @@
                         y: { beginAtZero: true, grid: { color: 'rgba(255,255,255,0.1)' }, ticks: { color: '#94a3b8' } },
                         x: { grid: { display: false }, ticks: { color: '#94a3b8' } }
                     },
-                    plugins: {
-                        legend: { labels: { color: 'white', font: { size: 14 } } }
-                    }
+                    plugins: { legend: { labels: { color: 'white', font: { size: 14 } } } }
                 }
             });
         }
@@ -226,10 +245,9 @@
                 const dayData = db[dateStr];
 
                 if (currentWeek !== -1 && currentWeek !== weekNum) {
-                    html += `
-                        <div class="history-week-header" style="background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);">
-                            TOTAL SEMANA: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}
-                        </div>`;
+                    html += `<div class="history-week-header" style="background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);">
+                                TOTAL SEMANA: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}
+                            </div>`;
                     weekTotals = { dino: 0, coffee: 0, smoke: 0 };
                 }
 
@@ -243,23 +261,19 @@
                 weekTotals.smoke += dayData.smoke || 0;
 
                 const dateFmt = dateObj.toLocaleDateString('es-ES', { weekday: 'short', day: '2-digit', month: 'short' });
-                
-                html += `
-                    <div class="history-item">
-                        <div class="history-date">${dateFmt} ${dateStr === hoy ? '<b>(Hoy)</b>' : ''}</div>
-                        <div class="history-vals">
-                            <span>🦖 ${dayData.dino}</span>
-                            <span>☕ ${dayData.coffee}</span>
-                            <span>🚬 ${dayData.smoke}</span>
-                        </div>
-                    </div>
-                `;
+                html += `<div class="history-item">
+                            <div class="history-date">${dateFmt} ${dateStr === hoy ? '<b>(Hoy)</b>' : ''}</div>
+                            <div class="history-vals">
+                                <span>🦖 ${dayData.dino}</span>
+                                <span>☕ ${dayData.coffee}</span>
+                                <span>🚬 ${dayData.smoke}</span>
+                            </div>
+                        </div>`;
 
                 if (index === sortedDates.length - 1) {
-                    html += `
-                        <div class="history-week-header" style="background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);">
-                            TOTAL SEMANA: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}
-                        </div>`;
+                    html += `<div class="history-week-header" style="background: rgba(56, 189, 248, 0.1); border-color: var(--accent); color: var(--accent);">
+                                TOTAL SEMANA: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}
+                            </div>`;
                 }
             });
 
@@ -271,11 +285,7 @@
             document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             btn.classList.add('active');
-            
-            // Si entramos en la sección de estadísticas, forzamos el redibujado de la gráfica
-            if(sectionId === 'stats-sec') {
-                setTimeout(renderChart, 100);
-            }
+            if(sectionId === 'stats-sec') { setTimeout(renderChart, 100); }
         }
 
         init();
