@@ -1,329 +1,156 @@
-<!doctype html>
-<html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Palacín Pro Dashboard - Registro Diario</title>
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+<!DOCTYPE html>
+<html class="h-full" lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Palacín Pro Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Sora:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-      :root {
-        --bg: #0f172a;
-        --card: rgba(30, 41, 59, 0.7);
-        --gold: #ffd700;
-        --accent: #38bdf8;
-        --coffee: #78350f;
-        --smoke: #64748b;
-      }
-      body {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        min-height: 100vh;
-        margin: 0;
-        font-family: "Segoe UI", system-ui, sans-serif;
-        background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
-        color: white;
-      }
-
-      .tabs {
-        display: flex;
-        gap: 8px;
-        margin: 20px 0;
-        z-index: 20;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .tab-btn {
-        padding: 8px 12px;
-        background: rgba(255, 255, 255, 0.05);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        color: #94a3b8;
-        border-radius: 12px;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 0.7rem;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-      }
-      .tab-btn.active {
-        background: var(--gold);
-        color: #0f172a;
-        box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
-        border-color: var(--gold);
-      }
-
-      .container {
-        text-align: center;
-        background: var(--card);
-        backdrop-filter: blur(20px);
-        padding: 1.5rem;
-        border-radius: 32px;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        max-width: 550px;
-        width: 95%;
-        margin-bottom: 20px;
-      }
-
-      .content-section {
-        display: none;
-        animation: fadeIn 0.4s ease;
-      }
-      .content-section.active {
-        display: block;
-      }
-      @keyframes fadeIn {
-        from {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
-
-      #fecha-actual {
-        font-size: 0.8rem;
-        color: var(--gold);
-        margin-bottom: 5px;
-        text-transform: uppercase;
-      }
-
-      .records-bar {
-        background: rgba(0, 0, 0, 0.3);
-        border-radius: 15px;
-        padding: 8px;
-        margin-bottom: 15px;
-        font-size: 0.75rem;
-        border: 1px dashed rgba(255, 215, 0, 0.3);
-      }
-
-      .emoji-box {
-        font-size: 60px;
-        margin: 10px 0;
-      }
-      .counter-display {
-        font-size: 3.5rem;
-        font-weight: 900;
-        margin: 0;
-      }
-
-      .button-group {
-        display: flex;
-        gap: 10px;
-        margin-top: 20px;
-      }
-      .action-btn {
-        flex: 3;
-        padding: 15px;
-        border: none;
-        border-radius: 16px;
-        font-weight: bold;
-        cursor: pointer;
-        transition: 0.2s;
-      }
-      .undo-btn {
-        flex: 1;
-        background: rgba(255, 255, 255, 0.1);
-        border: 1px solid rgba(255, 255, 255, 0.2);
-        color: white;
-        border-radius: 16px;
-        cursor: pointer;
-      }
-
-      .sub-tabs {
-        display: flex;
-        justify-content: center;
-        gap: 5px;
-        margin-bottom: 15px;
-      }
-      .sub-tab-btn {
-        font-size: 0.65rem;
-        padding: 5px 10px;
-        border-radius: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border: none;
-        color: white;
-        cursor: pointer;
-      }
-      .sub-tab-btn.active {
-        background: var(--accent);
-      }
-
-      .chart-container {
-        background: rgba(0, 0, 0, 0.2);
-        padding: 10px;
-        border-radius: 20px;
-        margin-bottom: 20px;
-        min-height: 250px;
-      }
-      .chart-view {
-        display: none;
-      }
-      .chart-view.active {
-        display: block;
-      }
-
-      .history-item {
-        background: rgba(255, 255, 255, 0.05);
-        margin: 8px 0;
-        padding: 12px;
-        border-radius: 12px;
-        display: grid;
-        grid-template-columns: 1fr auto;
-        align-items: center;
-        text-align: left;
-      }
-      .history-date {
-        font-size: 0.75rem;
-        color: #94a3b8;
-      }
-      .history-vals {
-        display: flex;
-        gap: 10px;
-        font-size: 0.9rem;
-        font-weight: bold;
-      }
-      .history-week-header {
-        margin-top: 20px;
-        padding: 5px 10px;
-        background: rgba(255, 215, 0, 0.1);
-        border-left: 3px solid var(--gold);
-        text-align: left;
-        font-size: 0.8rem;
-        font-weight: bold;
-      }
-
-      .log-item {
-        padding: 8px;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        font-size: 0.8rem;
-        text-align: left;
-      }
-
-      .dino-theme {
-        background: linear-gradient(135deg, #fbbf24, #d97706);
-        color: #451a03;
-      }
-      .coffee-theme {
-        background: linear-gradient(135deg, #78350f, #451a03);
-        color: white;
-      }
-      .smoke-theme {
-        background: linear-gradient(135deg, #64748b, #334155);
-        color: white;
-      }
-
-      .carousel-container {
-        position: relative;
-        max-width: 100%;
-        max-height: 15rem;
-        margin: 15px 154px 0px;
-        border-radius: 20px;
-        overflow: hidden;
-        aspect-ratio: 1 / 1; /* Mantiene el formato cuadrado de tus imágenes */
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        background: #000;
-      }
-
-      .carousel-slide {
-        display: none;
-        width: 100%;
-        height: 100%;
-      }
-
-      .carousel-slide.active {
-        display: block;
-        animation: fadeIn 0.5s ease;
-      }
-
-      .carousel-slide img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-      /* ... resto de estilos de botones que ya tenías ... */
-    </style>
-  </head>
-  <body>
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('dino-sec', this)">Dino</button>
-        <button class="tab-btn" onclick="switchTab('coffee-sec', this)">Coffee</button>
-        <button class="tab-btn" onclick="switchTab('smoke-sec', this)">Gascón</button>
-        <button class="tab-btn" onclick="switchTab('stats-sec', this)">📊 Stats</button>
-        <button class="tab-btn" onclick="switchTab('logs-sec', this)" style="border-color: var(--accent)">🕒 Logs</button>
-    </div>
-
-    <div class="container">
-        <div id="fecha-actual"></div>
-
-        <div class="records-bar">
-            🏆 MÁXIMOS DIARIOS: 🦖 <span id="rec-dino">0</span> | ☕ <span id="rec-coffee">0</span> | 🚬 <span id="rec-smoke">0</span>
-        </div>
-
-        <div id="dino-sec" class="content-section active">
-            <div class="emoji-box">🦖</div>
-            <div class="counter-display" id="countDino">0</div>
-            <div class="button-group">
-                <button class="action-btn dino-theme" onclick="incrementar('dino')">¡PISOTÓN!</button>
-                <button class="undo-btn" onclick="decrementar('dino')">➖</button>
-            </div>
-        </div>
-
-        <div id="coffee-sec" class="content-section">
-            <div class="emoji-box">☕</div>
-            <div class="counter-display" id="countCoffee">0</div>
-            <div class="button-group">
-                <button class="action-btn coffee-theme" onclick="incrementar('coffee')">¡CAFÉ!</button>
-                <button class="undo-btn" onclick="decrementar('coffee')">➖</button>
-            </div>
-        </div>
-
-        <div id="smoke-sec" class="content-section">
-            <div class="emoji-box">🚬</div>
-            <div class="counter-display" id="countSmoke">0</div>
-            <div class="button-group">
-                <button class="action-btn smoke-theme" onclick="incrementar('smoke')">¡PITI!</button>
-                <button class="undo-btn" onclick="decrementar('smoke')">➖</button>
-            </div>
-        </div>
-
-        <div id="stats-sec" class="content-section">
-            <div class="sub-tabs">
-                <button class="sub-tab-btn active" onclick="switchChartView('daily', this)">Diario</button>
-                <button class="sub-tab-btn" onclick="switchChartView('weekly', this)">Semanal</button>
-                <button class="sub-tab-btn" onclick="switchChartView('monthly', this)">Mensual</button>
-            </div>
-            <div class="sub-tabs" style="border-top: 1px solid rgba(255, 255, 255, 0.05); padding-top: 10px; margin-top: -10px;">
-                <button class="sub-tab-btn" id="btn-bar" onclick="setChartType('bar')">📊 Barras</button>
-                <button class="sub-tab-btn active" id="btn-line" onclick="setChartType('line')">📈 Líneas</button>
-            </div>
-            <div class="chart-container">
-                <div id="daily-view" class="chart-view active"><canvas id="dailyChart"></canvas></div>
-                <div id="weekly-view" class="chart-view"><canvas id="weeklyChart"></canvas></div>
-                <div id="monthly-view" class="chart-view"><canvas id="monthlyChart"></canvas></div>
-            </div>
-            <h3 style="margin: 20px 0 10px 0; font-size: 0.9rem; border-bottom: 1px solid rgba(255, 255, 255, 0.1); padding-bottom: 5px;">HISTORIAL DETALLADO</h3>
-            <div id="history-container" style="max-height: 250px; overflow-y: auto; padding-right: 5px"></div>
-        </div>
-
-        <div id="logs-sec" class="content-section">
-            <h3 style="margin: 0 0 15px 0; font-size: 1rem; color: var(--accent)">ÚLTIMA ACTIVIDAD</h3>
-            <div id="log-lista" style="max-height: 400px; overflow-y: auto">Cargando actividad...</div>
-        </div>
-
-        <div class="carousel-container" id="rafa-carousel">
-            <button class="carousel-btn prev" onclick="moveSlide(-1)">&#10094;</button>
-            <button class="carousel-btn next" onclick="moveSlide(1)">&#10095;</button>
-        </div>
-    </div>
-
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.1.3/firebase-database-compat.js"></script>
 
     <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'sans-serif'], display: ['Sora', 'sans-serif'] },
+                    colors: {
+                        navy: { 900: '#0a0c1a', 950: '#05060d' },
+                        gold: { 400: '#fbbf24', 500: '#f59e0b', 600: '#d97706' },
+                        mocha: { 400: '#a18262', 500: '#785b3c', 600: '#5e432c' },
+                        slate: { 400: '#94a3b8', 500: '#64748b', 600: '#475569' }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background: radial-gradient(circle at 0% 0%, #1a1f35 0%, #0a0c1a 100%); color: #f8fafc; }
+        .glass-card { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37); }
+        .glow-bg { position: absolute; width: 400px; height: 400px; border-radius: 50%; filter: blur(120px); z-index: -1; opacity: 0.15; }
+        @keyframes pulse-soft { 0%, 100% { opacity: 0.15; transform: scale(1); } 50% { opacity: 0.25; transform: scale(1.1); } }
+        .animate-pulse-soft { animation: pulse-soft 8s infinite ease-in-out; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 10px; }
+    </style>
+</head>
+
+<body class="min-h-screen font-sans selection:bg-gold-500/30">
+    <div class="fixed inset-0 bg-black/80 backdrop-blur-md hidden items-center justify-center flex-col z-[100]" id="cooldownOverlay">
+        <div class="text-center p-8 glass-card rounded-3xl">
+            <div class="inline-block animate-spin rounded-full h-12 w-12 border-4 border-gold-500 border-t-transparent mb-4"></div>
+            <h2 class="text-2xl font-display font-bold text-white mb-2">Bloqueo de Seguridad</h2>
+            <p class="text-gold-400 font-mono text-3xl" id="cooldownTimerText">15s</p>
+            <p class="text-white/40 text-sm mt-4 italic">Alguien ha registrado una acción recientemente...</p>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="glow-bg bg-gold-500 top-[-10%] left-[-10%] animate-pulse-soft"></div>
+        <div class="glow-bg bg-mocha-500 bottom-[-10%] right-[-10%] animate-pulse-soft" style="animation-delay: -4s;"></div>
+    </div>
+
+    <div class="flex flex-col lg:flex-row min-h-screen">
+        <aside class="w-full lg:w-72 glass-card border-r border-white/5 flex flex-col p-6 z-10">
+            <div class="mb-10 flex items-center gap-3">
+                <div class="w-10 h-10 bg-gradient-to-br from-gold-400 to-gold-600 rounded-xl flex items-center justify-center shadow-lg shadow-gold-500/20">
+                    <span class="text-navy-950 font-display font-extrabold text-xl">P</span>
+                </div>
+                <h1 class="font-display font-bold text-2xl tracking-tight text-white">Palacín Pro</h1>
+            </div>
+            <nav class="space-y-4 flex-grow">
+                <div class="records-bar p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                    <p class="text-[10px] text-gold-400 font-bold uppercase tracking-widest">🏆 Máximos Diarios</p>
+                    <div class="grid grid-cols-3 gap-2 text-center">
+                        <div><p class="text-xs text-white/40">🦖</p><p class="font-bold text-sm" id="rec-dino">0</p></div>
+                        <div><p class="text-xs text-white/40">☕</p><p class="font-bold text-sm" id="rec-coffee">0</p></div>
+                        <div><p class="text-xs text-white/40">🚬</p><p class="font-bold text-sm" id="rec-smoke">0</p></div>
+                    </div>
+                </div>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-white/5">
+                <p class="text-[10px] text-white/20 uppercase font-bold mb-4">Fecha Actual</p>
+                <p id="fecha-actual" class="text-sm font-medium text-gold-400 uppercase"></p>
+            </div>
+        </aside>
+
+        <main class="flex-grow p-4 lg:p-8 overflow-y-auto">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="glass-card rounded-3xl p-6 relative overflow-hidden group hover:scale-[1.02] transition-all">
+                    <div class="absolute -right-4 -top-4 text-gold-500/10 text-8xl">🦖</div>
+                    <p class="text-xs font-bold text-gold-400 uppercase tracking-widest mb-1">Dinos</p>
+                    <h3 class="font-display font-extrabold text-5xl mb-6" id="count-dino">0</h3>
+                    <div class="flex gap-2">
+                        <button class="flex-grow bg-gold-500 text-navy-900 font-bold py-3 rounded-xl text-xs hover:bg-gold-400 active:scale-95 transition-all action-btn" onclick="incrementar('dino')">SUMAR</button>
+                        <button class="px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 action-btn" onclick="decrementar('dino')">➖</button>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 relative overflow-hidden group hover:scale-[1.02] transition-all">
+                    <div class="absolute -right-4 -top-4 text-mocha-500/10 text-8xl">☕</div>
+                    <p class="text-xs font-bold text-mocha-400 uppercase tracking-widest mb-1">Cafés</p>
+                    <h3 class="font-display font-extrabold text-5xl mb-6" id="count-cafe">0</h3>
+                    <div class="flex gap-2">
+                        <button class="flex-grow bg-mocha-500 text-white font-bold py-3 rounded-xl text-xs hover:bg-mocha-400 active:scale-95 transition-all action-btn" onclick="incrementar('coffee')">SUMAR</button>
+                        <button class="px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 action-btn" onclick="decrementar('coffee')">➖</button>
+                    </div>
+                </div>
+                <div class="glass-card rounded-3xl p-6 relative overflow-hidden group hover:scale-[1.02] transition-all">
+                    <div class="absolute -right-4 -top-4 text-slate-500/10 text-8xl">🚬</div>
+                    <p class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-1">Gascón</p>
+                    <h3 class="font-display font-extrabold text-5xl mb-6" id="count-smoke">0</h3>
+                    <div class="flex gap-2">
+                        <button class="flex-grow bg-slate-500 text-white font-bold py-3 rounded-xl text-xs hover:bg-slate-400 active:scale-95 transition-all action-btn" onclick="incrementar('smoke')">SUMAR</button>
+                        <button class="px-4 bg-white/5 rounded-xl border border-white/10 hover:bg-white/10 action-btn" onclick="decrementar('smoke')">➖</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+                <div class="xl:col-span-2 space-y-8">
+                    <div class="glass-card rounded-3xl p-8">
+                        <div class="flex items-center justify-between mb-8">
+                            <h2 class="font-display font-bold text-xl">Estadísticas</h2>
+                            <div class="flex bg-white/5 p-1 rounded-xl gap-1 border border-white/10">
+                                <button class="px-4 py-1.5 text-[10px] font-bold rounded-lg bg-white/10 text-white sub-tab-btn active" onclick="switchChartView('daily', this)">DIARIO</button>
+                                <button class="px-4 py-1.5 text-[10px] font-bold rounded-lg text-white/40 hover:text-white sub-tab-btn" onclick="switchChartView('weekly', this)">SEMANAL</button>
+                                <button class="px-4 py-1.5 text-[10px] font-bold rounded-lg text-white/40 hover:text-white sub-tab-btn" onclick="switchChartView('monthly', this)">MENSUAL</button>
+                            </div>
+                        </div>
+                        <div class="h-[350px] w-full">
+                            <canvas id="mainChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card rounded-3xl overflow-hidden relative h-80 group">
+                        <div id="rafa-carousel" class="w-full h-full relative">
+                            </div>
+                        <div class="absolute bottom-6 left-6 z-20">
+                            <span class="bg-gold-500 text-navy-950 text-[10px] font-black px-3 py-1 rounded-full uppercase tracking-tighter shadow-xl">The Rafa Collection</span>
+                        </div>
+                        <button onclick="moveSlide(-1)" class="absolute left-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/40 backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity">❮</button>
+                        <button onclick="moveSlide(1)" class="absolute right-4 top-1/2 -translate-y-1/2 z-30 p-3 bg-black/40 backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity">❯</button>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-3xl p-8 flex flex-col h-[750px]">
+                    <h2 class="font-display font-bold text-xl mb-6">Actividad Reciente</h2>
+                    <div id="log-lista" class="space-y-4 overflow-y-auto custom-scrollbar flex-grow pr-2">
+                        </div>
+                    <div class="mt-6 pt-6 border-t border-white/5 space-y-4">
+                        <h2 class="font-display font-bold text-lg">Historial Completo</h2>
+                        <div id="history-container" class="space-y-3 overflow-y-auto custom-scrollbar max-h-64 pr-2 text-xs">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // CONFIGURACIÓN (Usa tus llaves de siempre)
         const firebaseConfig = {
             apiKey: "AIzaSyCfEoMAHh3xBClnXNKxQm--9HKE8GebXns",
             authDomain: "palacin-dashboard.firebaseapp.com",
@@ -331,8 +158,7 @@
             projectId: "palacin-dashboard",
             storageBucket: "palacin-dashboard.firebasestorage.app",
             messagingSenderId: "825240958725",
-            appId: "1:825240958725:web:f3d75b8e1d0fbbf011e96c",
-            measurementId: "G-LZM39T7KNY",
+            appId: "1:825240958725:web:f3d75b8e1d0fbbf011e96c"
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -346,37 +172,17 @@
         let estaBloqueado = false;
         const TIEMPO_BLOQUEO = 15000;
         const hoy = new Date().toISOString().split("T")[0];
-        let charts = { daily: null, weekly: null, monthly: null };
-        let currentChartType = "line";
-        let timerInterval = null;
-        let currentSlide = 0;
-        const TOTAL_FOTOS = 12;
-
-        function cargarFotosRafa() {
-            const contenedor = document.getElementById("rafa-carousel");
-            for (let i = 1; i <= TOTAL_FOTOS; i++) {
-                const slide = document.createElement("div");
-                slide.className = `carousel-slide ${i === 1 ? "active" : ""}`;
-                slide.innerHTML = `<img src="./rata/R${i}.png" alt="Rafa ${i}">`;
-                contenedor.insertBefore(slide, contenedor.firstChild);
-            }
-        }
-
-        function moveSlide(direction) {
-            const slides = document.querySelectorAll(".carousel-slide");
-            if (slides.length === 0) return;
-            slides[currentSlide].classList.remove("active");
-            currentSlide = (currentSlide + direction + slides.length) % slides.length;
-            slides[currentSlide].classList.add("active");
-        }
+        let mainChart = null;
+        let chartMode = 'daily';
 
         function init() {
             const opciones = { weekday: "long", day: "numeric", month: "long" };
             document.getElementById("fecha-actual").innerText = new Date().toLocaleDateString("es-ES", opciones);
 
             cargarFotosRafa();
-            setInterval(() => moveSlide(1), 4000);
+            setInterval(() => moveSlide(1), 5000);
 
+            // Escuchador Principal
             dbRef.on("value", (snapshot) => {
                 db = snapshot.val() || {};
                 if (!db[hoy]) db[hoy] = { dino: 0, coffee: 0, smoke: 0 };
@@ -384,6 +190,7 @@
                 verificarRecords();
             });
 
+            // Escuchador de Bloqueo Global
             lockRef.on("value", (snapshot) => {
                 const data = snapshot.val();
                 if (data && data.bloqueado) {
@@ -393,23 +200,28 @@
                 } else liberarBloqueoVisual();
             });
 
-            logsRef.limitToLast(20).on("value", (snapshot) => {
+            // Logs con formato nuevo diseño
+            logsRef.limitToLast(15).on("value", (snapshot) => {
                 const logs = snapshot.val();
                 const lista = document.getElementById("log-lista");
-                if (!logs) { lista.innerHTML = "No hay actividad"; return; }
-                lista.innerHTML = Object.values(logs).reverse().map((log) => {
-                    const iconos = { dino: "🦖", coffee: "☕", smoke: "🚬" };
-                    const color = log.accion === "resta" ? "#ef4444" : "#10b981";
-                    const prefijo = log.accion === "resta" ? "-" : "+";
-                    const partes = log.fecha.split(", ");
-                    return `<div class="log-item">
-                        <span style="color:var(--smoke)">${partes[0]} ${partes[1]}</span> 
-                        <span style="margin-left:10px; color:${color}; font-weight:bold;">${prefijo}1 ${iconos[log.tipo]}</span>
-                        <span style="color:#94a3b8; font-size:0.75rem;"> (Total: ${log.valor_final})</span>
-                    </div>`;
+                if (!logs) return;
+                lista.innerHTML = Object.values(logs).reverse().map(log => {
+                    const icon = log.tipo === 'dino' ? '🦖' : log.tipo === 'coffee' ? '☕' : '🚬';
+                    const color = log.accion === 'resta' ? 'text-red-400' : 'text-emerald-400';
+                    const partes = log.fecha.split(', ');
+                    return `
+                        <div class="flex items-center gap-4 p-3 rounded-2xl bg-white/[0.02] border border-white/5">
+                            <div class="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center text-lg">${icon}</div>
+                            <div class="flex-grow">
+                                <p class="text-xs font-bold ${color}">${log.accion === 'suma' ? '+1' : '-1'} Registrado</p>
+                                <p class="text-[10px] text-white/40 uppercase font-mono">${partes[0]} · ${partes[1]}</p>
+                            </div>
+                            <div class="text-right"><p class="text-[10px] text-white/20 uppercase font-bold">Total</p><p class="font-bold text-sm">${log.valor_final}</p></div>
+                        </div>`;
                 }).join("");
             });
 
+            // Records Sidebar
             recordsRef.on("value", (snapshot) => {
                 const recs = snapshot.val() || { dino: 0, coffee: 0, smoke: 0 };
                 document.getElementById("rec-dino").innerText = recs.dino || 0;
@@ -418,16 +230,17 @@
             });
         }
 
+        // --- LÓGICA DE NEGOCIO ---
         function incrementar(tipo) {
             if (estaBloqueado) return;
             lockRef.set({ bloqueado: true, timestamp: firebase.database.ServerValue.TIMESTAMP });
-            db[hoy][tipo]++;
+            db[hoy][tipo] = (db[hoy][tipo] || 0) + 1;
             const nuevoValor = db[hoy][tipo];
             dbRef.child(hoy).set(db[hoy]);
             logsRef.push({
                 tipo: tipo, accion: "suma", valor_final: nuevoValor,
                 timestamp: firebase.database.ServerValue.TIMESTAMP,
-                fecha: new Date().toLocaleString("es-ES"),
+                fecha: new Date().toLocaleString("es-ES")
             });
             if (tipo === "dino" && nuevoValor === 31) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
         }
@@ -441,146 +254,141 @@
                 logsRef.push({
                     tipo: tipo, accion: "resta", valor_final: db[hoy][tipo],
                     timestamp: firebase.database.ServerValue.TIMESTAMP,
-                    fecha: new Date().toLocaleString("es-ES"),
+                    fecha: new Date().toLocaleString("es-ES")
                 });
             }
         }
 
         function verificarRecords() {
-            let maximos = { dino: 0, coffee: 0, smoke: 0 };
-            Object.keys(db).forEach(fecha => {
-                if ((db[fecha].dino || 0) > maximos.dino) maximos.dino = db[fecha].dino;
-                if ((db[fecha].coffee || 0) > maximos.coffee) maximos.coffee = db[fecha].coffee;
-                if ((db[fecha].smoke || 0) > maximos.smoke) maximos.smoke = db[fecha].smoke;
+            let maxs = { dino: 0, coffee: 0, smoke: 0 };
+            Object.keys(db).forEach(f => {
+                if (db[f].dino > maxs.dino) maxs.dino = db[f].dino;
+                if (db[f].coffee > maxs.coffee) maxs.coffee = db[f].coffee;
+                if (db[f].smoke > maxs.smoke) maxs.smoke = db[f].smoke;
             });
-            recordsRef.set(maximos);
+            recordsRef.set(maxs);
         }
 
-        function activarBloqueoVisual(segundos) {
-            estaBloqueado = true;
-            const botones = document.querySelectorAll(".action-btn");
-            if (!window.textosOriginales) window.textosOriginales = Array.from(botones).map(b => b.innerText);
-            botones.forEach(btn => { btn.style.opacity = "0.6"; btn.style.cursor = "not-allowed"; });
-            if (timerInterval) clearInterval(timerInterval);
-            let restantes = segundos;
-            botones.forEach(b => b.innerText = `ESPERA (${restantes}s)`);
-            timerInterval = setInterval(() => {
-                restantes--;
-                if (restantes <= 0) { clearInterval(timerInterval); lockRef.set({ bloqueado: false, timestamp: 0 }); }
-                else botones.forEach(b => b.innerText = `ESPERA (${restantes}s)`);
-            }, 1000);
-        }
-
-        function liberarBloqueoVisual() {
-            estaBloqueado = false;
-            if (timerInterval) clearInterval(timerInterval);
-            const botones = document.querySelectorAll(".action-btn");
-            if (window.textosOriginales) {
-                botones.forEach((b, i) => {
-                    b.innerText = window.textosOriginales[i];
-                    b.style.opacity = "1";
-                    b.style.cursor = "pointer";
-                });
-            }
-        }
-
+        // --- UI & GRAFICOS ---
         function refreshUI() {
             const d = db[hoy] || { dino: 0, coffee: 0, smoke: 0 };
-            document.getElementById("countDino").innerText = d.dino || 0;
-            document.getElementById("countCoffee").innerText = d.coffee || 0;
-            document.getElementById("countSmoke").innerText = d.smoke || 0;
+            document.getElementById("count-dino").innerText = d.dino || 0;
+            document.getElementById("count-cafe").innerText = d.coffee || 0;
+            document.getElementById("count-smoke").innerText = d.smoke || 0;
             renderHistory();
-            renderAllCharts();
+            updateMainChart();
         }
 
-        function switchChartView(view, btn) {
-            document.querySelectorAll(".chart-view").forEach((v) => v.classList.remove("active"));
-            btn.parentElement.querySelectorAll(".sub-tab-btn").forEach((b) => b.classList.remove("active"));
-            document.getElementById(view + "-view").classList.add("active");
-            btn.classList.add("active");
-        }
-
-        function setChartType(type) {
-            currentChartType = type;
-            document.getElementById("btn-bar").classList.toggle("active", type === "bar");
-            document.getElementById("btn-line").classList.toggle("active", type === "line");
-            renderAllCharts();
-        }
-
-        function renderAllCharts() {
-            renderChart("daily", Object.keys(db).sort().slice(-7));
-            const weeklyData = {};
-            Object.keys(db).forEach((date) => {
-                const wk = "S" + getWeekNumber(new Date(date));
-                if (!weeklyData[wk]) weeklyData[wk] = { dino: 0, coffee: 0, smoke: 0 };
-                weeklyData[wk].dino += db[date].dino || 0;
-                weeklyData[wk].coffee += db[date].coffee || 0;
-                weeklyData[wk].smoke += db[date].smoke || 0;
+        function switchChartView(mode, btn) {
+            chartMode = mode;
+            document.querySelectorAll('.sub-tab-btn').forEach(b => {
+                b.classList.remove('bg-white/10', 'text-white');
+                b.classList.add('text-white/40');
             });
-            renderChart("weekly", Object.keys(weeklyData).slice(-6), weeklyData);
-
-            const monthlyData = {};
-            Object.keys(db).forEach((date) => {
-                const mo = new Date(date).toLocaleDateString("es-ES", { month: "short", year: "2-digit" });
-                if (!monthlyData[mo]) monthlyData[mo] = { dino: 0, coffee: 0, smoke: 0 };
-                monthlyData[mo].dino += db[date].dino || 0;
-                monthlyData[mo].coffee += db[date].coffee || 0;
-                monthlyData[mo].smoke += db[date].smoke || 0;
-            });
-            renderChart("monthly", Object.keys(monthlyData).slice(-6), monthlyData);
+            btn.classList.add('bg-white/10', 'text-white');
+            btn.classList.remove('text-white/40');
+            updateMainChart();
         }
 
-        function renderChart(type, labels, sourceData = db) {
-            const canvas = document.getElementById(type + "Chart");
-            if (!canvas) return;
-            const ctx = canvas.getContext("2d");
-            const isBar = currentChartType === "bar";
-            if (charts[type]) charts[type].destroy();
-            charts[type] = new Chart(ctx, {
-                type: currentChartType,
+        function updateMainChart() {
+            const ctx = document.getElementById('mainChart').getContext('2d');
+            let labels = [], dDino = [], dCoffee = [], dSmoke = [];
+
+            if (chartMode === 'daily') {
+                labels = Object.keys(db).sort().slice(-7).map(d => new Date(d).toLocaleDateString('es-ES', {weekday:'short'}));
+                const keys = Object.keys(db).sort().slice(-7);
+                dDino = keys.map(k => db[k].dino || 0);
+                dCoffee = keys.map(k => db[k].coffee || 0);
+                dSmoke = keys.map(k => db[k].smoke || 0);
+            } else if (chartMode === 'weekly') {
+                const weekly = {};
+                Object.keys(db).forEach(d => {
+                    const wk = "Sem " + getWeekNumber(new Date(d));
+                    if(!weekly[wk]) weekly[wk] = {d:0, c:0, s:0};
+                    weekly[wk].d += db[d].dino || 0;
+                    weekly[wk].c += db[d].coffee || 0;
+                    weekly[wk].s += db[d].smoke || 0;
+                });
+                labels = Object.keys(weekly).slice(-5);
+                dDino = labels.map(l => weekly[l].d);
+                dCoffee = labels.map(l => weekly[l].c);
+                dSmoke = labels.map(l => weekly[l].s);
+            }
+
+            if (mainChart) mainChart.destroy();
+            mainChart = new Chart(ctx, {
+                type: 'line',
                 data: {
-                    labels: type === "daily" ? labels.map((d) => new Date(d).toLocaleDateString("es-ES", { day: "2-digit", month: "short" })) : labels,
+                    labels: labels,
                     datasets: [
-                        { label: "🦖", data: labels.map(l => sourceData[l].dino || 0), borderColor: "#ffd700", backgroundColor: isBar ? "#ffd700" : "rgba(255, 215, 0, 0.1)", borderWidth: 2, borderRadius: isBar ? 5 : 0, tension: 0.4, fill: !isBar },
-                        { label: "☕", data: labels.map(l => sourceData[l].coffee || 0), borderColor: "#78350f", backgroundColor: isBar ? "#78350f" : "rgba(120, 53, 15, 0.1)", borderWidth: 2, borderRadius: isBar ? 5 : 0, tension: 0.4, fill: !isBar },
-                        { label: "🚬", data: labels.map(l => sourceData[l].smoke || 0), borderColor: "#64748b", backgroundColor: isBar ? "#64748b" : "rgba(100, 116, 139, 0.1)", borderWidth: 2, borderRadius: isBar ? 5 : 0, tension: 0.4, fill: !isBar },
-                    ],
+                        { label: 'Dinos', data: dDino, borderColor: '#f59e0b', tension: 0.4, fill: true, backgroundColor: 'rgba(245, 158, 11, 0.1)' },
+                        { label: 'Cafés', data: dCoffee, borderColor: '#a18262', tension: 0.4, fill: true, backgroundColor: 'rgba(161, 130, 98, 0.1)' },
+                        { label: 'Gascón', data: dSmoke, borderColor: '#94a3b8', tension: 0.4, fill: true, backgroundColor: 'rgba(148, 163, 184, 0.1)' }
+                    ]
                 },
-                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true, grid: { color: "rgba(255,255,255,0.05)" }, ticks: { color: "#94a3b8", font: { size: 10 } } }, x: { grid: { display: false }, ticks: { color: "#94a3b8", font: { size: 10 } } } }, plugins: { legend: { labels: { color: "white", font: { size: 12 }, boxWidth: 12 } } } },
+                options: {
+                    responsive: true, maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#475569' } },
+                        x: { grid: { display: false }, ticks: { color: '#475569' } }
+                    }
+                }
             });
         }
 
         function renderHistory() {
             const container = document.getElementById("history-container");
-            const sortedDates = Object.keys(db).sort((a, b) => b.localeCompare(a));
-            let html = "", currentWeek = -1, weekTotals = { dino: 0, coffee: 0, smoke: 0 };
-            sortedDates.forEach((dateStr) => {
-                const dateObj = new Date(dateStr);
-                const weekNum = getWeekNumber(dateObj);
-                const dayData = db[dateStr] || { dino: 0, coffee: 0, smoke: 0 };
-                if (currentWeek !== -1 && currentWeek !== weekNum) {
-                    html += `<div class="history-week-header" style="color:var(--accent)">TOTAL: 🦖${weekTotals.dino} | ☕${weekTotals.coffee} | 🚬${weekTotals.smoke}</div>`;
-                    weekTotals = { dino: 0, coffee: 0, smoke: 0 };
-                }
-                if (currentWeek !== weekNum) { html += `<div class="history-week-header">SEMANA ${weekNum}</div>`; currentWeek = weekNum; }
-                weekTotals.dino += dayData.dino || 0; weekTotals.coffee += dayData.coffee || 0; weekTotals.smoke += dayData.smoke || 0;
-                html += `<div class="history-item"><div class="history-date">${dateObj.toLocaleDateString("es-ES", { weekday: "short", day: "2-digit" })} ${dateStr === hoy ? "<b>(Hoy)</b>" : ""}</div><div class="history-vals"><span>🦖${dayData.dino || 0}</span><span>☕${dayData.coffee || 0}</span><span>🚬${dayData.smoke || 0}</span></div></div>`;
-            });
-            container.innerHTML = html;
+            const sorted = Object.keys(db).sort((a,b) => b.localeCompare(a));
+            container.innerHTML = sorted.map(dateStr => {
+                const day = db[dateStr];
+                return `<div class="flex justify-between p-2 rounded-lg bg-white/[0.02]">
+                    <span class="text-white/40 font-mono">${dateStr === hoy ? 'HOY' : dateStr}</span>
+                    <span class="font-bold">🦖${day.dino || 0}  ☕${day.coffee || 0}  🚬${day.smoke || 0}</span>
+                </div>`;
+            }).join("");
+        }
+
+        // --- CARRUSEL RAFA ---
+        let currentSlide = 0;
+        function cargarFotosRafa() {
+            const container = document.getElementById("rafa-carousel");
+            for (let i = 1; i <= 12; i++) {
+                const slide = document.createElement("div");
+                slide.className = `carousel-slide absolute inset-0 transition-opacity duration-1000 ${i === 1 ? 'opacity-100 active' : 'opacity-0'}`;
+                slide.innerHTML = `<img src="./rata/R${i}.png" class="w-full h-full object-cover">`;
+                container.appendChild(slide);
+            }
+        }
+        function moveSlide(dir) {
+            const slides = document.querySelectorAll(".carousel-slide");
+            slides[currentSlide].classList.replace('opacity-100', 'opacity-0');
+            currentSlide = (currentSlide + dir + slides.length) % slides.length;
+            slides[currentSlide].classList.replace('opacity-0', 'opacity-100');
+        }
+
+        // --- BLOQUEO ---
+        function activarBloqueoVisual(segundos) {
+            estaBloqueado = true;
+            const overlay = document.getElementById('cooldownOverlay');
+            overlay.classList.remove('hidden'); overlay.classList.add('flex');
+            let r = segundos;
+            document.getElementById('cooldownTimerText').innerText = r + "s";
+            const it = setInterval(() => {
+                r--;
+                if (r <= 0) { clearInterval(it); lockRef.set({ bloqueado: false, timestamp: 0 }); }
+                else document.getElementById('cooldownTimerText').innerText = r + "s";
+            }, 1000);
+        }
+        function liberarBloqueoVisual() {
+            estaBloqueado = false;
+            document.getElementById('cooldownOverlay').classList.replace('flex', 'hidden');
         }
 
         function getWeekNumber(d) {
             d = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
             d.setUTCDate(d.getUTCDate() + 4 - (d.getUTCDay() || 7));
             return Math.ceil(((d - new Date(Date.UTC(d.getUTCFullYear(), 0, 1))) / 86400000 + 1) / 7);
-        }
-
-        function switchTab(sectionId, btn) {
-            document.querySelectorAll(".content-section").forEach((s) => s.classList.remove("active"));
-            document.querySelectorAll(".tab-btn").forEach((b) => b.classList.remove("active"));
-            document.getElementById(sectionId).classList.add("active");
-            btn.classList.add("active");
-            if (sectionId === "stats-sec") setTimeout(renderAllCharts, 100);
         }
 
         init();
